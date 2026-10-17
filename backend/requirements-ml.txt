@@ -1,0 +1,5 @@
+# Optional: enables dense CLIP retrieval and scripts/build_embeddings.py.
+-r requirements.txt
+sentence-transformers>=3.0
+pillow>=10.0
+tqdm>=4.66

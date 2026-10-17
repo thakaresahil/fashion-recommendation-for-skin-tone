@@ -1,0 +1,14 @@
+services:
+  huematch:
+    build:
+      context: .
+      args:
+        INSTALL_ML: ${INSTALL_ML:-false}
+    image: huematch:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      # Optional: product images from Kaggle and embeddings from scripts/build_embeddings.py.
+      - ./data/images:/app/data/images:ro
+      - ./data/embeddings:/app/data/embeddings:ro
+    restart: unless-stopped

@@ -1,0 +1,21 @@
+[project]
+name = "huematch-backend"
+version = "1.0.0"
+description = "Skin-tone aware fashion recommendation API"
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+# "l" is the conventional name for CIELAB lightness.
+ignore = ["E741"]
+
+[tool.ruff.lint.per-file-ignores]
+# FastAPI's Depends()/Query() defaults are the framework idiom.
+"app/api/*" = ["B008"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

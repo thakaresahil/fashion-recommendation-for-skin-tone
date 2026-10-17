@@ -1,0 +1,128 @@
+{
+  "_comment": "Skin tone groups and the clothing colours recommended for each. Tone groups and colour lists come from the original research notebooks; ITA ranges follow the Chardon et al. ITA classification, split into seven bands.",
+  "tones": [
+    {
+      "id": "very_fair",
+      "label": "Very Fair",
+      "swatch": "#E2C2AD",
+      "ita_min": 55,
+      "ita_max": 90,
+      "description": "Porcelain to ivory skin that burns easily. Saturated jewel tones and crisp primaries add contrast without washing you out.",
+      "colors": [
+        "Green",
+        "Navy Blue",
+        "Orange",
+        "Red",
+        "Blue"
+      ]
+    },
+    {
+      "id": "fair",
+      "label": "Fair",
+      "swatch": "#C9A48B",
+      "ita_min": 41,
+      "ita_max": 55,
+      "description": "Light skin with a soft glow. Earthy and deep shades balance your natural lightness.",
+      "colors": [
+        "Navy Blue",
+        "Green",
+        "Yellow",
+        "Brown"
+      ]
+    },
+    {
+      "id": "olive",
+      "label": "Olive / Medium",
+      "swatch": "#BB9277",
+      "ita_min": 28,
+      "ita_max": 41,
+      "description": "Medium skin with green or golden hints. Rich wine and berry shades bring out warmth.",
+      "colors": [
+        "Navy Blue",
+        "Maroon",
+        "Red",
+        "Green",
+        "Purple",
+        "Burgundy"
+      ]
+    },
+    {
+      "id": "light_brown",
+      "label": "Light Brown",
+      "swatch": "#AB8066",
+      "ita_min": 10,
+      "ita_max": 28,
+      "description": "Tan to light brown skin. Cool blues, teals and soft greys complement golden undertones.",
+      "colors": [
+        "Teal",
+        "Navy Blue",
+        "Blue",
+        "Burgundy",
+        "Grey"
+      ]
+    },
+    {
+      "id": "brown",
+      "label": "Brown",
+      "swatch": "#976E56",
+      "ita_min": -10,
+      "ita_max": 10,
+      "description": "Warm brown skin. Bright yellows, greens and clean whites pop beautifully.",
+      "colors": [
+        "Green",
+        "Navy Blue",
+        "Blue",
+        "Yellow",
+        "White"
+      ]
+    },
+    {
+      "id": "dark_brown",
+      "label": "Dark Brown",
+      "swatch": "#84604C",
+      "ita_min": -30,
+      "ita_max": -10,
+      "description": "Deep brown skin. High-contrast neutrals and pinks create a striking look.",
+      "colors": [
+        "Black",
+        "Navy Blue",
+        "Pink",
+        "Burgundy",
+        "White",
+        "Grey"
+      ]
+    },
+    {
+      "id": "deep",
+      "label": "Deep",
+      "swatch": "#6A4D3F",
+      "ita_min": -90,
+      "ita_max": -30,
+      "description": "Rich, deep skin. Almost every bold colour works; brights and pastels are especially vibrant.",
+      "colors": [
+        "Navy Blue",
+        "Maroon",
+        "Pink",
+        "Yellow",
+        "White",
+        "Grey",
+        "Orange",
+        "Blue"
+      ]
+    }
+  ],
+  "common": {
+    "id": "common",
+    "label": "Everyday Essentials",
+    "swatch": "#B0B0B0",
+    "description": "Versatile shades that suit every skin tone.",
+    "colors": [
+      "Teal",
+      "Navy Blue",
+      "Blue",
+      "White",
+      "Black",
+      "Grey"
+    ]
+  }
+}
