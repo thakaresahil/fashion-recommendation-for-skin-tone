@@ -4,6 +4,8 @@ import logging
 import time
 from dataclasses import dataclass
 
+import numpy as np
+
 from app.config import Settings
 from app.core.catalog import Catalog
 from app.core.palettes import PaletteBook
@@ -23,6 +25,8 @@ class Services:
     image_ids: set[int]
 
     def image_url(self, product_id: int) -> str | None:
+        if self.settings.image_base_url:
+            return f"{self.settings.image_base_url.rstrip('/')}/{product_id}.jpg"
         return f"/api/v1/products/{product_id}/image" if product_id in self.image_ids else None
 
 
@@ -47,4 +51,9 @@ def build_services(settings: Settings) -> Services:
         search.mode,
         time.perf_counter() - started,
     )
-    return Services(settings, catalog, palettes, search, Recommender(catalog, search), image_ids)
+    if settings.image_base_url:
+        has_image = np.ones(len(catalog), dtype=bool)
+    else:
+        has_image = catalog.df["id"].isin(image_ids).to_numpy()
+    recommender = Recommender(catalog, search, has_image)
+    return Services(settings, catalog, palettes, search, recommender, image_ids)

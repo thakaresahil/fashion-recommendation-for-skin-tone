@@ -39,7 +39,7 @@ export function ProductModal({
         </button>
         <div className="modal-main">
           <div className="modal-media">
-            <ProductImage product={product} large />
+            <ProductImage key={product.id} product={product} large />
           </div>
           <div className="modal-info">
             <h3>{product.name}</h3>

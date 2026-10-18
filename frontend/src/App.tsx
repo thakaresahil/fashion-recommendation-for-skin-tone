@@ -85,6 +85,12 @@ export default function App() {
               </p>
             </section>
             {error && <div className="alert error">{error}</div>}
+            {health && health.images === 0 && (
+              <div className="alert info small">
+                Product photos aren't installed, so items appear as colour tiles. Run <code>make images</code> and
+                restart the API to download them.
+              </div>
+            )}
             <ToneFinder
               tones={tones}
               selected={toneId}

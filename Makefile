@@ -1,4 +1,4 @@
-.PHONY: install install-ml api web test lint format embeddings docker
+.PHONY: install install-ml images api web test lint format embeddings docker
 
 install:            ## Install backend and frontend dependencies
 	pip install -r backend/requirements-dev.txt
@@ -6,6 +6,9 @@ install:            ## Install backend and frontend dependencies
 
 install-ml:         ## Add optional CLIP dependencies for dense search
 	pip install -r backend/requirements-ml.txt
+
+images:             ## Download product images (SAMPLE=1500 for a small subset)
+	cd backend && python -m scripts.fetch_images $(if $(SAMPLE),--sample $(SAMPLE))
 
 api:                ## Run the API with auto-reload on :8000
 	cd backend && uvicorn app.main:app --reload --port 8000

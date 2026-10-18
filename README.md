@@ -16,7 +16,7 @@ The project started as two research notebooks (`notebooks/`) that tried CLIP + B
 - **Palette recommendations**: 7 skin tone groups plus an "everyday essentials" set. Each maps to recommended colours, and products are grouped by colour, with filters for gender, category and occasion, free-text refinement, and a shuffle for variety.
 - **Hybrid search**: sparse BM25 and dense CLIP retrieval merged with weighted Reciprocal Rank Fusion. Colours named in the query ("red party dress") are parsed and applied as a filter.
 - **Similar items**: neighbouring products by CLIP embedding (or by text when embeddings are not built).
-- **Production setup**: FastAPI with OpenAPI docs, typed schemas, 36 automated tests, Ruff, a multi-stage Docker image, Docker Compose and GitHub Actions CI.
+- **Production setup**: FastAPI with OpenAPI docs, typed schemas, 43 automated tests, Ruff, a multi-stage Docker image, Docker Compose and GitHub Actions CI.
 
 ## Architecture
 
@@ -82,7 +82,7 @@ At this catalog size an exact NumPy matrix product beats an approximate-nearest-
 
 ## Quick start
 
-### Docker (single container, API + UI)
+### Docker (single container, API + UI + product images)
 
 ```bash
 docker compose up --build
@@ -93,25 +93,42 @@ docker compose up --build
 
 ```bash
 make install        # Python + npm dependencies
+make images         # product photos (see below)
 make api            # FastAPI on :8000 (auto-reload)
 make web            # Vite dev server on :5173, proxies /api → :8000
 ```
 
 Requires Python 3.11+ and Node 20+.
 
-### Optional: product images and CLIP search
+### Product images
 
-Without these the app runs BM25-only search and shows colour tiles in place of photos.
+Product photos are **not committed** to the repo (the dataset has about 44k images). Fetch them with one command:
 
-1. Download [Fashion Product Images (Small)](https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-small/data) and put the `images/` folder at `data/images/`.
-2. Build embeddings:
-   ```bash
-   make install-ml
-   make embeddings     # writes data/embeddings/, using images where available and text otherwise
-   ```
-3. Restart the API. `/api/v1/health` will report `search_mode: hybrid (bm25 + clip-image)`.
+```bash
+make images                 # all ~22k catalog images from the public Hugging Face mirror, no account needed
+make images SAMPLE=1500     # or a small subset balanced across gender and colour
+```
 
-With Docker, run `INSTALL_ML=true docker compose up --build`.
+Other sources:
+
+```bash
+cd backend
+python -m scripts.fetch_images --source local --path ~/Downloads/archive.zip   # zip downloaded from Kaggle in a browser
+python -m scripts.fetch_images --source kaggle                                 # Kaggle API (pip install kagglehub, ~/.kaggle/kaggle.json)
+```
+
+The Docker build fetches images automatically. Use `IMAGE_SAMPLE=2000 docker compose up --build` for a smaller image, or `FETCH_IMAGES=false` to skip them. If `data/images/` already has files, they are copied in instead. To host the photos on a CDN or bucket, set `HUEMATCH_IMAGE_BASE_URL=https://…`; the API then links to `{base}/{id}.jpg`.
+
+Without images the app still works and shows a colour tile for each product. With a partial set, recommendations put products that have a photo first.
+
+### Optional: CLIP dense search
+
+```bash
+make install-ml
+make embeddings     # writes data/embeddings/, using images where available and text otherwise
+```
+
+Restart the API and `/api/v1/health` will report `search_mode: hybrid (bm25 + clip-image)`. With Docker, run `INSTALL_ML=true docker compose up --build`.
 
 ## API
 
@@ -126,7 +143,7 @@ Interactive docs are at `/docs` (Swagger) and `/redoc`.
 | `GET` | `/api/v1/products/search` | `q`, `color`, filters, `limit`, `offset`, with per-retriever ranks |
 | `GET` | `/api/v1/products/{id}` | Product detail |
 | `GET` | `/api/v1/products/{id}/similar` | Similar products |
-| `GET` | `/api/v1/products/{id}/image` | Product image (when images are installed) |
+| `GET` | `/api/v1/products/{id}/image` | Product image (when images are downloaded) |
 | `GET` | `/api/v1/facets` | Filter values with counts |
 
 ```bash
@@ -152,8 +169,10 @@ curl "localhost:8000/api/v1/recommendations?skin_tone=olive&gender=Women&categor
 │   │   ├── schemas.py           Pydantic response models
 │   │   ├── services.py          startup wiring
 │   │   └── main.py              app factory
-│   ├── scripts/build_embeddings.py
-│   └── tests/                   36 pytest tests (unit + API)
+│   ├── scripts/
+│   │   ├── fetch_images.py      download product images (Hugging Face / Kaggle / local zip)
+│   │   └── build_embeddings.py  CLIP embeddings for dense search
+│   └── tests/                   43 pytest tests (unit + API)
 ├── frontend/                    React 19 + TypeScript + Vite
 ├── data/                        product metadata CSVs (+ optional images/embeddings)
 ├── notebooks/                   original research notebooks
@@ -168,7 +187,7 @@ make test    # pytest + TypeScript type-check
 make lint    # ruff
 ```
 
-The tests cover BM25 ranking, rank fusion with a dense retriever, loading and aligning embeddings, catalog cleaning and filters, ITA maths, skin tone classification on calibrated colour samples, error handling for bad uploads, and every API endpoint.
+The tests cover BM25 ranking, rank fusion with a dense retriever, loading and aligning embeddings, catalog cleaning and filters, ITA maths, skin tone classification on calibrated colour samples, error handling for bad uploads, the image fetcher (folder, zip and Hugging Face parquet sources) and every API endpoint.
 
 ## Limitations and roadmap
 

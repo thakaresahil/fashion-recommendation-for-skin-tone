@@ -43,7 +43,7 @@ jobs:
     needs: [backend, frontend]
     steps:
       - uses: actions/checkout@v4
-      - run: docker build -t huematch:ci .
+      - run: docker build --build-arg FETCH_IMAGES=false -t huematch:ci .
       - name: Smoke test
         run: |
           docker run -d --name huematch -p 8000:8000 huematch:ci

@@ -3,12 +3,13 @@ services:
     build:
       context: .
       args:
+        FETCH_IMAGES: ${FETCH_IMAGES:-true}
+        IMAGE_SAMPLE: ${IMAGE_SAMPLE:-}
         INSTALL_ML: ${INSTALL_ML:-false}
     image: huematch:latest
     ports:
       - "8000:8000"
     volumes:
-      # Optional: product images from Kaggle and embeddings from scripts/build_embeddings.py.
-      - ./data/images:/app/data/images:ro
+      # Optional: embeddings from scripts/build_embeddings.py.
       - ./data/embeddings:/app/data/embeddings:ro
     restart: unless-stopped

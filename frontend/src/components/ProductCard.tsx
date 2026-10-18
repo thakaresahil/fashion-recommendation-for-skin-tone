@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { Product } from "../api";
 
 function isLight(hex: string): boolean {
@@ -7,10 +8,19 @@ function isLight(hex: string): boolean {
 }
 
 export function ProductImage({ product, large = false }: { product: Product; large?: boolean }) {
-  if (product.image_url) {
-    return <img className="product-img" src={product.image_url} alt={product.name} loading="lazy" />;
+  const [failed, setFailed] = useState(false);
+  if (product.image_url && !failed) {
+    return (
+      <img
+        className="product-img"
+        src={product.image_url}
+        alt={product.name}
+        loading="lazy"
+        onError={() => setFailed(true)}
+      />
+    );
   }
-  // The image dataset is optional; without it, show a colour tile that still conveys the product.
+  // Without a photo (images not downloaded, or it failed to load), show a colour tile instead.
   return (
     <div
       className={`product-placeholder${large ? " large" : ""}`}

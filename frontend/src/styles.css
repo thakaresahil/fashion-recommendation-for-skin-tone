@@ -237,6 +237,10 @@ button:focus-visible {
   background: var(--danger-bg);
   color: var(--danger);
 }
+.alert.info {
+  background: var(--surface-2);
+  color: var(--muted);
+}
 .alert.warn {
   background: var(--warn-bg);
   color: var(--warn);

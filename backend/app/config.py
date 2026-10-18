@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     data_dir: Path = REPO_ROOT / "data"
     catalog_files: list[str] = ["men.csv", "women.csv"]
     images_dir: Path = REPO_ROOT / "data" / "images"
+    # Serve images from a CDN or bucket instead, as {image_base_url}/{id}.jpg for every product.
+    image_base_url: str | None = None
     embeddings_dir: Path = REPO_ROOT / "data" / "embeddings"
     palettes_file: Path = Path(__file__).resolve().parent / "data" / "palettes.json"
 
